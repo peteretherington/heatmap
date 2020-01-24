@@ -1,0 +1,64 @@
+body {
+	margin: 0;
+}
+
+.app {
+	background-color: #222;
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.vis {
+	position: relative;
+	background-color: #333;
+	padding: 40px 30px 20px;
+}
+
+.title,
+.description {
+	color: white;
+	margin-top: 0;
+	text-align: center;
+}
+
+.cell:hover {
+	stroke: black;
+	stroke-width: 2;
+	height: 40px;
+}
+
+.axis {
+	color: white;
+}
+
+.label {
+	fill: white;
+}
+
+.legend {
+	overflow: visible;
+	color: white;
+}
+.legend g {
+	color: white;
+}
+
+.d3-tip {
+	position: absolute;
+	z-index: 99;
+	padding: 10px;
+	background: #444;
+	box-shadow: -1px 1px 12px -2px #111;
+	border-radius: 4px;
+}
+
+.d3-tip p {
+	text-align: center;
+	font-size: 14px;
+	color: white;
+	margin: 0;
+	line-height: 1.5;
+}
