@@ -75,41 +75,14 @@ let heatMap = data => {
 	// VISUALIZATION
 	let vis = d3.select('#vis');
 
-	// HEADER
-	let header = vis.append('header');
-
-	// TITLE
-	header
-		.append('h1')
-		.attr('id', 'title')
-		.attr('class', 'title')
-		.text('D3: Monthly Global Land-Surface Temperature');
-
-	// SUBTITLE
-	header
-		.append('h2')
-		.attr('id', 'description')
-		.attr('class', 'description')
-		.text(() => {
-			let min = dataset[0].year,
-				max = dataset[dataset.length - 1].year;
-			return `From: ${min} - ${max}, Base Temperature: ${baseTemp}°`;
-		});
-
 	// TOOLTIP
-	let tooltip = d3
-		.tip()
-		.attr('class', 'd3-tip')
-		.attr('id', 'tooltip')
-		.offset([10, 0])
-		.html(d => d);
+	let tooltip = d3.select('.tooltip');
 
 	// SVG
 	let svg = vis
 		.append('svg')
 		.attr('width', width)
-		.attr('height', height)
-		.call(tooltip);
+		.attr('height', height);
 
 	// PLOT
 	svg
@@ -127,24 +100,23 @@ let heatMap = data => {
 		.attr('height', tileHeight)
 		.attr('fill', (d, i) => legendThreshold(Math.round((baseTemp + variance[i]) * 1000) / 1000))
 		.on('mouseover', (d, i) => {
-			let date = new Date(months[i], years[i]),
+			let date = new Date(years[i], months[i]),
 				temp = Math.round((baseTemp + variance[i]) * 100) / 100,
 				diff = variance[i];
 
 			let info = `
-	    <p>${d3.timeFormat('%Y - %B')(date)}</p>
-	    <p>${temp}°, ${diff}°</p>
-	`;
+				<p>${d3.timeFormat('%Y - %B')(date)}</p>
+				<p>${temp}°, ${diff}°</p>
+			`;
 
 			tooltip
+				.html(info)
 				.attr('data-year', years[i])
-				.style({
-					left: d3.event.pageX + 'px',
-					top: d3.event.pageY - 28 + 'px'
-				})
-				.show(info);
+				.style('opacity', 1)
+				.style('left', d3.event.pageX + 20 + 'px')
+				.style('top', d3.event.pageY - 40 + 'px');
 		})
-		.on('mouseout', () => tooltip.hide());
+		.on('mouseout', () => tooltip.style('opacity', 0));
 
 	// AXES
 	let xAxis = d3.axisBottom(yearScale).tickFormat(d3.format('d')),
@@ -209,14 +181,6 @@ let heatMap = data => {
 		.attr('height', legendHeight)
 		.attr('x', d => legendX(d[0]))
 		.attr('y', -legendHeight);
-
-	legend
-		.append('text')
-		.attr('fill', '#fff')
-		.attr('font-weight', 'bold')
-		.attr('text-anchor', 'start')
-		.style('transform', 'translate(150%, 0)')
-		.text('Temperature (degrees)');
 };
 
 // // INIT
